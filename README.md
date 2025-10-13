@@ -1,2 +1,2 @@
 # rachnid
-AI chatbot for folks simple QnAs
+AI chatbot for folks who need simple QnAs
