@@ -1,6 +1,17 @@
 import clientPromise from '@/lib/connect';
 import { ObjectId } from "mongodb";
 
+interface QnAItem {
+  question: string;
+  answer: string;
+}
+
+interface UserDocument {
+  _id: ObjectId;
+  qna: QnAItem[];
+  // ... other fields
+}
+
 export async function checkUsername(username: string) {
   if (!username) return null;
   const client = await clientPromise;
@@ -18,7 +29,7 @@ export async function addQuestionAnswer(_id: string, question: string, answer: s
   try {
     const client = await clientPromise;
     const db = client.db("application");
-    const collection = db.collection("users");
+    const collection = db.collection<UserDocument>("users");
     const result = await collection.updateOne(
       { _id: new ObjectId(_id) },
       {
@@ -47,7 +58,7 @@ export async function removeQuestion(_id: string, question: string) {
   try {
     const client = await clientPromise;
     const db = client.db("application");
-    const collection = db.collection("users");
+    const collection = db.collection<UserDocument>("users");
 
     const result = await collection.updateOne(
       { _id: new ObjectId(_id) },
