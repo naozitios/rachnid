@@ -1,65 +1,108 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
+
+import { useState } from "react";
+import { useUserUuid } from "@/context/UserUuidContext";
+import { useRouter } from "next/navigation";
+
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function Home() {
+  const [uuid, setUuid] = useState("");
+  const [password, setPassword] = useState("");
+  const [uuidResult, setUuidResult] = useState<string|null>(null);
+  const [passwordResult, setPasswordResult] = useState<string|null>(null);
+  const { setUserUuid } = useUserUuid();
+  const [uuidLoginMode, setUuidLoginMode] = useState(true);
+  const router = useRouter();
+
+  async function handleUsernameCheck(e: React.FormEvent) {
+    e.preventDefault();
+    setUuidResult(null);
+
+    if (!uuid) {
+      setUuidResult("No UUID entered.");
+      return;
+    }
+
+    try {
+      const username = uuid;
+      const res = await fetch("/api/check-username", {
+        method: "POST",
+        body: JSON.stringify({ username }),
+      });
+      const data = await res.json();
+      if (data.exists) {
+        setUserUuid(data.exists);
+        router.push('/tabs');
+      } else {
+        setUuidResult(`UUID ${uuid} not found.`);
+      }
+    } catch (error) {
+      console.error('Error checking username:', error);
+      setUuidResult('An error occurred while checking the UUID.');
+    }
+  }
+
+  function handlePasswordCheck(e: React.FormEvent) {
+    e.preventDefault();
+    // Replace with actual check logic
+    if (password === "correct-password") {
+      router.push("/tabs");
+    } else {
+      setPasswordResult(password ? `Password for ${password} not found.` : "No password entered.");
+    }
+  }
+
   return (
-    <main className="flex min-h-screen flex-col p-0 m-0">
-      <Tabs defaultValue="chatbot" className="flex flex-col flex-1 w-full h-full min-h-screen">
-      <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="chatbot">Chatbot</TabsTrigger>
-          <TabsTrigger value="upload">Upload FAQs</TabsTrigger>
-        </TabsList>
-        <TabsContent value="chatbot" className="h-full flex flex-col">
-          <Card className="flex flex-col flex-1 h-full">
-            <CardHeader>
-              <CardTitle>Chatbot</CardTitle>
-              <CardDescription>
-                Chat with the AI assistant.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-4">
-                {/* Chat messages will go here */}
-              </div>
-            </CardContent>
-            <CardFooter className="flex space-x-2">
-              <Input placeholder="Type your message..." />
-              <Button>Send</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="upload" className="h-full flex flex-col">
-          <Card className="flex flex-col flex-1 h-full">
-            <CardHeader>
-              <CardTitle>Upload FAQs</CardTitle>
-              <CardDescription>
-                Upload a file with your FAQs.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Textarea placeholder="Paste your FAQs here." />
-            </CardContent>
-            <CardFooter>
-              <Button>Upload</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </main>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-8 p-8">
+      <div className="w-full flex justify-center mb-8">
+        <div className="flex items-center space-x-2">
+          <Switch checked={uuidLoginMode} onCheckedChange={setUuidLoginMode} />
+          <Label >Hello Sir, do you have a gifted username?</Label>
+        </div>
+      </div>
+      {
+        uuidLoginMode ? (
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Check username</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleUsernameCheck} className="space-y-4">
+            <Input
+              placeholder="Enter UUID"
+              value={uuid}
+              onChange={e => setUuid(e.target.value)}
+            />
+            <Button type="submit">Check UUID</Button>
+            {uuidResult && <div className="text-muted-foreground mt-2">{uuidResult}</div>}
+          </form>
+        </CardContent>
+      </Card>
+        ) : (
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Check Password</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handlePasswordCheck} className="space-y-4">
+            <Input
+              placeholder="Enter Password"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            <Button type="submit">Check Password</Button>
+            {passwordResult && <div className="text-muted-foreground mt-2">{passwordResult}</div>}
+          </form>
+        </CardContent>
+      </Card>
+        )
+      }
+    </div>
   );
 }
