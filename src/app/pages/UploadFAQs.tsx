@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserUuid } from "@/context/UserUuidContext";
 
+import { FAQList } from "./FAQList";
+
 export function UploadFAQs() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -15,7 +17,6 @@ export function UploadFAQs() {
     e.preventDefault();
     if (!question.trim() || !answer.trim()) return;
     setFaqs([...faqs, { question, answer }]);
-
     const res = await fetch("/api/qna", {
       method: "POST",
       body: JSON.stringify({ action: "add", _id: userUuid, question: question, answer: answer }),
@@ -28,18 +29,6 @@ export function UploadFAQs() {
     }
     setQuestion("");
     setAnswer("");
-  }
-
-  async function handleDeleteFAQ(idx: number) {
-    const res = await fetch("/api/qna", {
-      method: "POST",
-      body: JSON.stringify({ action: "remove", _id: userUuid, question: faqs[idx].question }),
-    });
-    const data = await res.json();
-    if (!data.success) {
-      console.error("Failed to remove FAQ:", data.message);
-    }
-    setFaqs(faqs.filter((_, i) => i !== idx));
   }
 
   return (
@@ -66,20 +55,7 @@ export function UploadFAQs() {
             Add FAQ
           </Button>
         </form>
-        <div className="space-y-2">
-          {faqs.length > 0 && <div className="font-semibold">Existing FAQs:</div>}
-          {faqs.map((faq, idx) => (
-            <div key={idx} className="flex items-center justify-between border rounded p-2">
-              <div>
-                <div className="font-medium">Q: {faq.question}</div>
-                <div className="text-sm text-muted-foreground">A: {faq.answer}</div>
-              </div>
-              <Button variant="destructive" size="sm" onClick={() => handleDeleteFAQ(idx)}>
-                Delete
-              </Button>
-            </div>
-          ))}
-        </div>
+        <FAQList />
       </CardContent>
     </Card>
   );
