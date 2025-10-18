@@ -12,7 +12,6 @@ interface UserDocument {
   qna: FAQ[];
 }
 
-
 export async function checkUsername(username: string) {
   if (!username) return null;
   const client = await clientPromise;
