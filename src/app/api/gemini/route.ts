@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents:
-        "Only answer the query with the FAQs. If the answer isn't in the FAQs say 'I don't have the information to support that'. Question: " +
+        "Only answer the query with the FAQs. If answers in the FAQ can be used to solve the users question use them. Add a friendly tone to your answers only if the question can be answered. If the answer isn't in the FAQs say 'Sorry about that but I don't have the information to support that'. Question: " +
         message +
         "\n\nFAQs:\n" +
         faqs.map((f:{ question: string; answer: string }) => `Q: ${f.question}\nA: ${f.answer}`).join("\n"),
