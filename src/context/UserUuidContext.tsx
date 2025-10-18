@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 
 interface UserUuidContextType {
   userUuid: string | null;
@@ -23,31 +23,24 @@ export function UserUuidProvider({ children }: { children: ReactNode }) {
   function clearSession() {
     setUserUuid(null);
     setFaqs([]);
-    setUsername("Guest");
-    sessionStorage.removeItem("userUuid"); // remove persisted value
+    setUsername("");
   }
 
-  async function loadFaq() {
-  if (!userUuid) return;
-  try {
-    const res = await fetch("/api/qna", {
-      method: "POST",
-      body: JSON.stringify({ action: "view", _id: userUuid }),
-    });
-    const data = await res.json();
-    if (data.qna) {
-      setFaqs(data.qna);
+  const loadFaq = useCallback(async () => {
+    if (!userUuid) return;
+    try {
+      const res = await fetch("/api/qna", {
+        method: "POST",
+        body: JSON.stringify({ action: "view", _id: userUuid }),
+      });
+      const data = await res.json();
+      if (data.qna) {
+        setFaqs(data.qna);
+      }
+    } catch (error) {
+      console.error("Failed to load QnA:", error);
     }
-  } catch (error) {
-    console.error("Failed to load QnA:", error);
-  }
-}
-
-  // ✅ Load from sessionStorage on mount
-  useEffect(() => {
-    const stored = sessionStorage.getItem("userUuid");
-    if (stored) setUserUuid(stored);
-  }, []);
+  }, [userUuid]);
 
   // ✅ Save to sessionStorage when it changes
   useEffect(() => {
