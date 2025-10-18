@@ -3,6 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 
 export async function callGeminiAPI(message:string, faqs: { question: string; answer: string }[]) {
   const apiUrl = process.env.GEMINI_API_KEY;
+  console.log(apiUrl)
   if (!apiUrl) {
     throw new Error("NEXT_PUBLIC_GEMINI_API_KEY is not set");
   }

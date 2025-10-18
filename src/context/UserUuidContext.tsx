@@ -58,7 +58,7 @@ export function UserUuidProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadFaq();
-  }, [userUuid]);
+  }, [userUuid, loadFaq]);
 
   return (
     <UserUuidContext.Provider value={{ userUuid, setUserUuid, faqs, setFaqs, username, setUsername, clearSession, loadFaq }}>
