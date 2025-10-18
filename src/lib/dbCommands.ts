@@ -1,15 +1,15 @@
 import clientPromise from '@/lib/connect';
 import { ObjectId } from "mongodb";
 
-interface QnAItem {
+interface FAQ {
   question: string;
   answer: string;
 }
 
 interface UserDocument {
   _id: ObjectId;
-  qna: QnAItem[];
-  // ... other fields
+  username?: string;
+  qna: FAQ[];
 }
 
 export async function checkUsername(username: string) {
