@@ -25,7 +25,7 @@ import {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { username } = useUserUuid();
 
-  const randomNum = Math.floor(Math.random() * 3) + 1;
+  const randomNum = username.length % 3 + 1;
 
   const data = {
     user: {
