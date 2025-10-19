@@ -82,7 +82,7 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" className="cursor-pointer">Login</Button>
                 {uuidResult && <p className="text-red-500 text-center text-sm mt-2">{uuidResult}</p>}
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? Contact Noah
