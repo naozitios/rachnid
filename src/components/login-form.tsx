@@ -39,7 +39,7 @@ export function LoginForm({
     }
 
     try {
-      const trimmedUsername = usernameInput.trim();
+      const trimmedUsername = usernameInput.trim().toLowerCase();
       const res = await fetch('/api/check-username', {
         method: 'POST',
         body: JSON.stringify({ username: trimmedUsername }),
