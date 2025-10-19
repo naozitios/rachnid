@@ -52,7 +52,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: MessageSquareDashed,
       },
       {
-        name: "FAQ section",
+        name: "Add an FAQ",
         url: "/add-faq",
         icon: BadgeQuestionMark,
       }

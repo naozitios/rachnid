@@ -35,9 +35,9 @@ export function Chatbot() {
   return (
     <Card className="flex flex-col flex-1 h-full">
       <CardHeader>
-        <CardTitle>Chatbot</CardTitle>
+        <CardTitle>Ask anything!</CardTitle>
         <CardDescription>
-          Chat with the AI assistant.
+          Chat with mini me
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">

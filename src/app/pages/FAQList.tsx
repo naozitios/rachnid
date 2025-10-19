@@ -47,8 +47,8 @@ export function FAQList() {
       <TableCaption>A list of your FAQs.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[60%]">Question</TableHead>
-          <TableHead className="w-[40%]">Answer</TableHead>
+          <TableHead className="w-[35%]">Question</TableHead>
+          <TableHead className="w-[65%]">Answer</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -56,10 +56,10 @@ export function FAQList() {
           {faqs.length > 0 ? (
             faqs.map((faq, idx) => (
               <TableRow key={idx}>
-                <TableCell className="align-top font-medium">
+                <TableCell className="align-top font-medium break-words whitespace-normal">
                   {faq.question}
                 </TableCell>
-                <TableCell className="align-top text-muted-foreground">
+                <TableCell className="align-top text-muted-foreground break-words whitespace-normal">
                   {faq.answer}
                 </TableCell>
                 <TableCell>

@@ -34,7 +34,7 @@ export function LoginForm({
     setUuidResult(null);
 
     if (!usernameInput) {
-      setUuidResult('No UUID entered.');
+      setUuidResult('No username entered.');
       return;
     }
 
