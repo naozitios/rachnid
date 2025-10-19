@@ -50,7 +50,7 @@ export function LoginForm({
         setUsername(usernameInput);
         router.push('/');
       } else {
-        setUuidResult(`UUID ${usernameInput} not found.`);
+        setUuidResult(`username ${usernameInput} not found.`);
       }
     } catch (error) {
       console.error('Error checking username:', error);
